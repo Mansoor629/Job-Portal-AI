@@ -1,0 +1,41 @@
+JOB PORTAL WITH AI-BASED RESUME SCREENING — WINDOWS RUN GUIDE
+
+1. Extract the ZIP to a folder, e.g. Desktop\Job-Portal-AI.
+2. Install Node.js 18+ (prefer Node.js 20 LTS), Python 3.10–3.12, and MongoDB Community Server. Keep MongoDB running as a Windows service. Alternatively use MongoDB Atlas and set its URI in backend\.env.
+3. Open the extracted folder in Visual Studio Code (File > Open Folder).
+
+TERMINAL 1 — BACKEND (VS Code Terminal > New Terminal)
+cd backend
+npm install
+copy .env.example .env
+npm run dev
+
+IMPORTANT: Open backend\.env and change JWT_SECRET to a long random secret. If using MongoDB Atlas, replace MONGO_URI with your Atlas connection string. Default local MongoDB is mongodb://127.0.0.1:27017/job_portal_ai.
+
+TERMINAL 2 — AI SERVICE (create a NEW terminal, starting at project root)
+cd ai-service
+py -3.11 -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python -m spacy download en_core_web_sm
+python app.py
+
+If py -3.11 is not available, use: python -m venv venv
+If PowerShell blocks activation, use Command Prompt (cmd) for this terminal, or run venv\Scripts\python.exe directly instead of activating.
+
+TERMINAL 3 — FRONTEND (create another NEW terminal, starting at project root)
+cd frontend
+npm install
+npm run dev
+
+4. Open http://localhost:5173 in your browser.
+5. Register as Recruiter, create a job with required skills, sign out, register as Applicant, apply with a text-based PDF/DOCX/TXT resume. Return to Recruiter to see ranked applicants.
+
+Expected services:
+Backend: http://localhost:5000
+AI: http://127.0.0.1:8000
+Frontend: http://localhost:5173
+
+If a terminal starts inside a subfolder, run 'cd ..' first to return to project root before switching to another folder.
+
+Troubleshooting: If backend cannot connect to MongoDB, start MongoDB service or check backend\.env. If the frontend fails to fetch data, check backend port 5000. If Python installation fails, use Python 3.11. For more detail, see README.md.
